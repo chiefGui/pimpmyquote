@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>PimpMyQuote</title>
+  <link rel="stylesheet" href="vendor/normalize.css/normalize.css">
+  <link rel="stylesheet" href="static/css/screen.css">
+  <link href='http://fonts.googleapis.com/css?family=Ek+Mukta:200|Comfortaa:300' rel='stylesheet' type='text/css'>
+</head>
+<body>
+  <div class="container">
+    <h1>pimp/my/quote</h1>
+
+    <p>
+      Está na hora de converter aquela frase
+      célebre do seu amigo filósofo em algo
+      memorável.
+    </p>
+
+    <hr>
+
+    <div class="index">
+      <form action="" method="post">
+        <div class="input-block">
+          <label for="facebook">URL do Facebook do seu amigo</label>
+          <input id="facebook" name="facebook" type="text">
+        </div>
+
+        <div class="input-block">
+          <label for="quote">Citação</label>
+          <textarea id="quote" name="quote"></textarea>
+        </div>
+
+        <button>Enviar</button>
+
+        <div class="user"></div>
+        <script id="user-template" type="html/template">
+          <hr>
+
+          <div class="photo">
+            <img src="http://graph.facebook.com/<%= user.username %>/picture?type=large" alt="<%= user.name %>">
+          </div>
+
+          <div class="quote">
+            <span>"</span><div class="text"></div><span>"</span>
+            <div class="author">
+              &mdash; <a href="<%= user.link %>" target="_blank"><%= user.name %></a>
+            </div>
+          </div>
+        </script>
+      </form>
+    </div>
+  </div>
+
+  <script src="static/js/app.js"></script>
+</body>
+</html>

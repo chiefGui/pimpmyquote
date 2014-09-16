@@ -1,0 +1,12 @@
+{
+  "name": "pimpmyquote",
+  "main": "index.js",
+  "version": "0.0.1",
+  "authors": [
+    "chiefGui <guilhermeoderdenge@gmail.com>"
+  ],
+  "license": "MIT",
+  "dependencies": {
+    "normalize.css": "~3.0.1"
+  }
+}
