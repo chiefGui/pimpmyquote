@@ -4,11 +4,82 @@
   <meta charset="UTF-8">
   <title>PimpMyQuote</title>
   <link rel="stylesheet" href="vendor/normalize.css/normalize.css">
+  <link rel="stylesheet" href="vendor/bijou.min.css">
+  <link rel="stylesheet" href="node_modules/animate.css/animate.min.css">
   <link rel="stylesheet" href="static/css/screen.css">
-  <link href='http://fonts.googleapis.com/css?family=Ek+Mukta:200|Comfortaa:300' rel='stylesheet' type='text/css'>
+  <link href='http://fonts.googleapis.com/css?family=Volkhov:400,400italic' rel='stylesheet' type='text/css'>
 </head>
 <body>
-  <div class="container">
+  <div class="straight-line"></div>
+
+  <div class="row">
+    <div class="span four">
+      <div class="sidebar">
+        <p>Desenvolvido por <a href="https://github.com/chiefGui" target="_blank">Guilherme Oderdenge</a></p>
+        <h1 class="animated fadeInUp">PimpMyQuote</h1>
+        <hr>
+
+        <div class="form">
+          <div class="input-block">
+            <label for="facebook">URL do Facebook do seu amigo</label>
+            <div class="input-group">
+              <input class="input-control" id="facebook" name="facebook" type="text">
+            </div>
+          </div>
+
+          <div class="input-block">
+            <label for="quote">A citação que mudará o mundo</label>
+            <textarea class="input-control" id="quote" name="quote" maxlength="140"></textarea>
+            <span class="counter muted">Você tem <span class="counter-number">140</span> caracteres restantes.</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="span eight">
+      <div class="app">
+        <div class="quote">
+          <div class="row">
+            <div class="span-two">
+              <div class="photo">
+                <img src="static/images/default_avatar.jpg" alt="Usuário padrão">
+              </div>
+            </div>
+
+            <div class="span ten">
+              <blockquote class="context">
+                <div class="content">
+                  <p>
+                  </p>
+                </div>
+                <div class="author">&mdash; <a href="#">Oderdenge</a>, <a href="#">Guilherme</a>.</div>
+              </blockquote>
+            </div>
+          </div>
+        </div>
+
+        <script id="quote-template" type="html/template">
+          <div class="row">
+            <div class="span-two">
+              <div class="photo">
+                <img src="http://graph.facebook.com/<%= user.username %>/picture?type=large" alt="<%= user.name %>">
+              </div>
+            </div>
+
+            <div class="span ten">
+              <blockquote class="context">
+                <div class="content">
+                  <p><%= quote %></p>
+                </div>
+                <div class="author">&mdash; <a href="<%= user.link %>" target="_blank"><%= user.last_name %></a>, <a href="<%= user.link %>"><%= user.first_name %></a>.</div>
+              </blockquote>
+            </div>
+          </div>
+        </script>
+      </div>
+    </div>
+  </div>
+
+<!--   <div class="container">
     <h1>pimp/my/quote</h1>
 
     <p>
@@ -50,7 +121,7 @@
         </script>
       </form>
     </div>
-  </div>
+  </div> -->
 
   <script src="static/js/app.js"></script>
 </body>

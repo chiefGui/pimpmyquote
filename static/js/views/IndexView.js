@@ -1,37 +1,26 @@
-var $                 = require('jquery')
-    , Backbone        = require('backbone')
-    , UserModel       = require('../models/UserModel')
-    , UserProfileView = require('./UserProfileView');
+var Backbone        = require('backbone')
+    , ea            = require('../ea')
+    , QuoteView     = require('./QuoteView')
+    , SidebarView   = require('./SidebarView');
 
 module.exports = Backbone.View.extend({
-  el: '.index',
-  model: UserModel,
-  events: {
-    'blur #facebook': 'showUser',
-    'keyup #quote': 'typeQuote'
-  },
-  initialize: function () {
-    this.focus();
-  },
-  focus: function () {
-    this.$('#facebook').focus();
-  },
-  showUser: function (element) {
-    this.facebook = $(element.currentTarget).val();
+  initialize: function (options) {
+    options = options || false;
 
-    this.getUser().fetch().done(function (user) {
-      new UserProfileView({ user: user });
-    });
-  },
-  getUser: function () {
-    var concept = this.facebook.split('/')
-        , result  = concept[concept.length - 1];
+    if (options) {
+      if (undefined !== options.user) this.user = options.user;
 
-    return new this.model({ slug: result });
-  },
-  typeQuote: function (element) {
-    var content = $(element.currentTarget).val();
+      options.quote && (this.quote = options.quote);
 
-    $('.text').html(content);
+      new QuoteView({ user: this.user, quote: this.quote });
+    };
+
+    this.render();
+  },
+  setQuote: function (content) {
+    ea.trigger('typeQuote', content);
+  },
+  render: function () {
+    new SidebarView;
   }
 });

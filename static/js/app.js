@@ -1607,7 +1607,6 @@
   return Backbone;
 
 }));
-
 },{"underscore":2}],2:[function(require,module,exports){
 //     Underscore.js 1.7.0
 //     http://underscorejs.org
@@ -12225,13 +12224,24 @@ var Backbone    = require('backbone')
 
 module.exports = Backbone.Router.extend({
   routes: {
-    '': 'index'
+    '': 'index',
+    '(:user/)(:quote)': 'specific'
   },
   index: function () {
     new IndexView;
+  },
+  specific: function (user, quote) {
+    quote = quote || false;
+
+    new IndexView({ user: user, quote: quote });
   }
 });
-},{"./views/IndexView":8,"backbone":1}],6:[function(require,module,exports){
+},{"./views/IndexView":9,"backbone":1}],6:[function(require,module,exports){
+var _           = require('underscore')
+    , Backbone  = require('backbone');
+
+module.exports = _.extend({}, Backbone.Events);
+},{"backbone":1,"underscore":4}],7:[function(require,module,exports){
 var $           = require('jquery')
     , Backbone  = require('backbone')
     , Router    = require('./Router');
@@ -12241,71 +12251,117 @@ Backbone.$ = $;
 new Router;
 
 Backbone.history.start();
-},{"./Router":5,"backbone":1,"jquery":3}],7:[function(require,module,exports){
+},{"./Router":5,"backbone":1,"jquery":3}],8:[function(require,module,exports){
 var Backbone = require('backbone');
 
 module.exports = Backbone.Model.extend({
   initialize: function (options) {
-    this.slug = options.slug;
+    this.user = options.user;
   },
   urlRoot: function () {
-    return 'http://graph.facebook.com/' + this.slug;
+    return 'http://graph.facebook.com/' + this.user;
   }
 });
-},{"backbone":1}],8:[function(require,module,exports){
-var $                 = require('jquery')
-    , Backbone        = require('backbone')
-    , UserModel       = require('../models/UserModel')
-    , UserProfileView = require('./UserProfileView');
+},{"backbone":1}],9:[function(require,module,exports){
+var Backbone        = require('backbone')
+    , ea            = require('../ea')
+    , QuoteView     = require('./QuoteView')
+    , SidebarView   = require('./SidebarView');
 
 module.exports = Backbone.View.extend({
-  el: '.index',
-  model: UserModel,
-  events: {
-    'blur #facebook': 'showUser',
-    'keyup #quote': 'typeQuote'
-  },
-  initialize: function () {
-    this.focus();
-  },
-  focus: function () {
-    this.$('#facebook').focus();
-  },
-  showUser: function (element) {
-    this.facebook = $(element.currentTarget).val();
-
-    this.getUser().fetch().done(function (user) {
-      new UserProfileView({ user: user });
-    });
-  },
-  getUser: function () {
-    var concept = this.facebook.split('/')
-        , result  = concept[concept.length - 1];
-
-    return new this.model({ slug: result });
-  },
-  typeQuote: function (element) {
-    var content = $(element.currentTarget).val();
-
-    $('.text').html(content);
-  }
-});
-},{"../models/UserModel":7,"./UserProfileView":9,"backbone":1,"jquery":3}],9:[function(require,module,exports){
-var $                 = require('jquery')
-    , _               = require('underscore')
-    , Backbone        = require('backbone');
-
-module.exports = Backbone.View.extend({
-  el: '.user',
   initialize: function (options) {
-    this.user = options.user;
+    options = options || false;
 
-    this.template = _.template($('#user-template').html());
+    if (options) {
+      if (undefined !== options.user) this.user = options.user;
+
+      options.quote && (this.quote = options.quote);
+
+      new QuoteView({ user: this.user, quote: this.quote });
+    };
 
     this.render();
   },
+  setQuote: function (content) {
+    ea.trigger('typeQuote', content);
+  },
   render: function () {
-    this.$el.html(this.template({ user: this.user }));
+    new SidebarView;
   }
 });
-},{"backbone":1,"jquery":3,"underscore":4}]},{},[6]);
+},{"../ea":6,"./QuoteView":10,"./SidebarView":11,"backbone":1}],10:[function(require,module,exports){
+var $                 = require('jquery')
+    , _               = require('underscore')
+    , Backbone        = require('backbone')
+    , ea              = require('../ea')
+    , QuoteView       = require('./SidebarView')
+    , UserModel       = require('../models/UserModel');
+
+module.exports = Backbone.View.extend({
+  el: '.quote',
+  model: UserModel,
+  initialize: function (options) {
+    this.quote = options.quote;
+    options.user && this.fetchUser(options.user);
+
+    this.template = _.template($('#quote-template').html());
+
+    ea.on('typeQuote', this.typeQuote);
+    ea.on('changeUser', this.fetchUser);
+
+    this.render();
+  },
+  render: function (user) {
+    user = this.user || user;
+
+    var self = this;
+
+    user.done(function (user) {
+      self.prepareTemplate(user, self.quote);
+    });
+  },
+  fetchUser: function (user) {
+    new UserModel({ user: user }).fetch({ reset: true });
+    console.log(this);
+  },
+  prepareTemplate: function (user, quote) {
+    this.$el.html(this.template({ user: user, quote: quote }));
+  },
+  typeQuote: function (content) {
+    $('.context p').html(content);
+  }
+});
+},{"../ea":6,"../models/UserModel":8,"./SidebarView":11,"backbone":1,"jquery":3,"underscore":4}],11:[function(require,module,exports){
+var $                 = require('jquery')
+    , Backbone        = require('backbone')
+    , QuoteView       = require('./QuoteView')
+    , ea              = require('../ea');
+
+module.exports = Backbone.View.extend({
+  el: '.sidebar',
+  events: {
+    'blur #facebook': 'getUser',
+    'keyup #quote': 'typeQuote'
+  },
+  initialize: function () {
+    this.$('#facebook').focus();
+  },
+  getUser: function (element) {
+    var concept = $(element.currentTarget).val().split('/')
+        , user  = concept[concept.length - 1];
+
+    ea.trigger('changeUser', user);
+  },
+  typeQuote: function (element) {
+    var content   = $(element.currentTarget).val()
+        , length  = content.length;
+
+    ea.trigger('typeQuote', content);
+
+    this.count(length);
+  },
+  count: function (length) {
+    this.$('.count-number').html(length);
+  }
+});
+},{"../ea":6,"./QuoteView":10,"backbone":1,"jquery":3}]},{},[7]);

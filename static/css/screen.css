@@ -1,4 +1,158 @@
-body {
+body, html {
+  height: 100%;
+  min-height: 100%;
+}
+
+.straight-line {
+  background-color: #F25353;
+  height: 2px;
+}
+
+.sidebar {
+  background-color: #737373;
+  height: 100vh;
+  padding: 40px;
+}
+
+.sidebar h1 {
+  font-size: 2.4rem;
+  color: #fff;
+  font-weight: 200;
+}
+
+.sidebar p {
+  color: #fff;
+  letter-spacing: 2px;
+  font-weight: 200;
+  text-transform: uppercase;
+  font-size: 10px;
+  white-space: nowrap;
+}
+
+.sidebar a {
+  color: #77cef7;
+  border: 2px solid #77cef7;
+  padding: 5px;
+  border-radius: 3px;
+}
+
+.sidebar a:hover {
+  color: #f7f277;
+  border-color: #f7f277;
+}
+
+.sidebar hr {
+  border: none;
+  border-top: 1px dashed #8f8f8f;
+  margin: 40px 0;
+}
+
+.sidebar .input-block {
+  width: 100%;
+  margin: 20px 0;
+}
+
+.input-block label {
+  width: 100%;
+  float: left;
+  color: #e5e5e5;
+}
+
+.input-block .input-control {
+  background-color: #494949;
+  width: 100%;
+  max-width: 100%;
+  padding: 10px;
+  box-sizing: border-box;
+  font-size: 24px;
+  border-radius: 5px;
+  border: 3px solid #8f8f8f;
+  outline: none;
+  color: #fff;
+  transition: all .1s ease-in-out;
+  font-weight: 200;
+  box-shadow: 0 1px 0 #494949;
+  letter-spacing: 2px;
+}
+
+.input-block .input-control:hover,
+.input-block .input-control:focus {
+  border: 3px solid #fff;
+  color: #fff;
+}
+
+.input-block textarea.input-control {
+  height: 300px;
+}
+
+.quote {
+  padding: 60px;
+  padding-left: 0;
+}
+
+.quote .photo {
+  width: 170px;
+  max-width: 170px;
+  min-width: 170px;
+  float: left;
+}
+
+.quote .photo img {
+  width: 170px;
+  max-width: 170px;
+  min-width: 170px;
+  border-radius: 5px;
+}
+
+.quote .context {
+  width: 100%;
+  float: left;
+}
+
+.quote .context p {
+  font-family: "Volkhov", serif;
+  font-size: 2.4rem;
+  line-height: 3rem;
+  word-spacing: 0.4rem;
+  font-style: italic;
+}
+
+.quote .context p:before,
+.quote .context p:after {
+  font-size: 4rem;
+  position: relative;
+  color: #e5e5e5;
+  font-style: normal;
+}
+
+.quote .context p:before {
+  content: '\201C';
+  top: 10px;
+}
+
+.quote .context p:after {
+  content: '\201D';
+  top: 20px;
+}
+
+.quote .author {
+  margin: 20px 0;
+  text-align: right;
+  font-size: 24px;
+  font-weight: 200;
+  font-style: italic;
+}
+
+.quote .author {
+  color: #8f8f8f;
+}
+
+.quote .author a {
+  color: #77cef7;
+  border-bottom: 1px dashed #77cef7;
+}
+
+/*body {
   font-family: "Ek Mukta", sans-serif;
   color: #666;
 }
@@ -86,4 +240,4 @@ h1 {
 
 .quote .author a {
   color: #3498db;
-}
+}*/
